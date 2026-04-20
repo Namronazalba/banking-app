@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserAccounts, getAccountById, savePendingDeposit, generateId, getUserPendingDeposits } from '../utils/storage';
 import type { Account, PendingDeposit } from '../types/banking';
