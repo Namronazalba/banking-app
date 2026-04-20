@@ -1,4 +1,4 @@
-import { User, Account, Transaction, PendingDeposit } from '../types/banking';
+import type { User, Account, Transaction, PendingDeposit } from '../types/banking';
 
 const STORAGE_KEYS = {
   USERS: 'banking_users',

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, AuthState } from '../types/banking';
+import type { User, AuthState } from '../types/banking';
 import {
   getCurrentUser,
   setCurrentUser,

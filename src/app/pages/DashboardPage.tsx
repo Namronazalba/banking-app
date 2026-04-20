@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserAccounts, getAccountTransactions } from '../utils/storage';
-import { Account, Transaction } from '../types/banking';
+import type { Account, Transaction } from '../types/banking';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { ArrowUpRight, ArrowDownLeft, CreditCard, Wallet, TrendingUp, DollarSign } from 'lucide-react';

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserAccounts, getAccountById, updateAccount, saveTransaction, generateId } from '../utils/storage';
-import { Account } from '../types/banking';
+import type { Account } from '../types/banking';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
