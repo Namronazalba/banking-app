@@ -10,7 +10,7 @@ import { Label } from '../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Alert, AlertDescription } from '../components/ui/alert';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../components/ui/dialog';
-import { AlertCircle, CheckCircle2, ArrowRightLeft } from 'lucide-react';
+import { AlertCircle, ArrowRightLeft } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const TransferPage: React.FC = () => {

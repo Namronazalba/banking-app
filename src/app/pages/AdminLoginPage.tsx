@@ -5,7 +5,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
-import { Landmark, AlertCircle, ShieldCheck } from 'lucide-react';
+import {  AlertCircle, ShieldCheck } from 'lucide-react';
 import { Alert, AlertDescription } from '../components/ui/alert';
 
 export const AdminLoginPage: React.FC = () => {

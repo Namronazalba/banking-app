@@ -17,7 +17,7 @@ import QRCodeLib from 'qrcode';
 
 export const DepositPage: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [accountId, setAccountId] = useState('');
   const [amount, setAmount] = useState('');
@@ -339,8 +339,9 @@ export const DepositPage: React.FC = () => {
                         {getStatusBadge(deposit.status)}
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        {account?.accountType.charAt(0).toUpperCase() + account?.accountType.slice(1)} Account - 
-                        ****{account?.accountNumber.slice(-4)}
+                        {account
+                          ? `${account.accountType.charAt(0).toUpperCase()}${account.accountType.slice(1)} Account - ****${account.accountNumber.slice(-4)}`
+                          : ""}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {formatDate(deposit.createdAt)}

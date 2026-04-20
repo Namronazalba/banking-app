@@ -5,7 +5,7 @@ import type { Account, Transaction } from '../types/banking';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Badge } from '../components/ui/badge';
-import { Wallet, CreditCard, TrendingUp, Calendar, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+import { Wallet, CreditCard, TrendingUp, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 
 export const AccountsPage: React.FC = () => {
   const { user } = useAuth();

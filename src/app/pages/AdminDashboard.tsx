@@ -331,8 +331,9 @@ export const AdminDashboard: React.FC = () => {
                           Customer: {depositUser?.firstName} {depositUser?.lastName}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {account?.accountType.charAt(0).toUpperCase() + account?.accountType.slice(1)} - 
-                          ****{account?.accountNumber.slice(-4)}
+                          {account
+                            ? `${account.accountType.charAt(0).toUpperCase()}${account.accountType.slice(1)} - ****${account.accountNumber.slice(-4)}`
+                            : "No account"}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
                           Requested: {formatDate(deposit.createdAt)}
