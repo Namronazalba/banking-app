@@ -93,7 +93,7 @@ export const LoginPage: React.FC = () => {
       <div className="w-full max-w-md">
         <div className="flex items-center justify-center mb-8">
           <Landmark className="h-12 w-12 text-indigo-600 mr-3" />
-          <h1 className="text-3xl font-bold text-gray-900">SecureBank</h1>
+          <h1 className="text-3xl font-bold text-gray-900">BankWithNorms</h1>
         </div>
 
         <Tabs defaultValue="login" className="w-full">

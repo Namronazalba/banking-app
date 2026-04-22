@@ -29,14 +29,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await new Promise(resolve => setTimeout(resolve, 500));
     
     // Check for admin login
-    if (email === 'admin@securebank.com' && password === 'admin123') {
+    if (email === 'admin@bankwithnorms.com' && password === 'admin123') {
       const adminUser: User = {
         id: 'admin-001',
-        email: 'admin@securebank.com',
+        email: 'admin@bankwithnorms.com',
         firstName: 'Super',
         lastName: 'Admin',
         phone: '+1 (555) 999-0000',
-        address: 'SecureBank HQ',
+        address: 'BankWithNorms HQ',
         pin: '0000',
         role: 'admin',
         createdAt: new Date().toISOString(),

@@ -222,7 +222,7 @@ export const AdminDashboard: React.FC = () => {
               <ShieldCheck className="h-8 w-8 text-purple-600" />
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-                <p className="text-sm text-gray-600">SecureBank Administration</p>
+                <p className="text-sm text-gray-600">BankWithNorms Administration</p>
               </div>
             </div>
             <Button variant="outline" onClick={handleLogout}>

@@ -60,7 +60,7 @@ export const Layout: React.FC = () => {
             {/* Logo */}
             <Link to="/dashboard" className="flex items-center gap-2">
               <Landmark className="h-8 w-8 text-indigo-600" />
-              <span className="text-xl font-bold text-gray-900">SecureBank</span>
+              <span className="text-xl font-bold text-gray-900">BankWithNorms</span>
             </Link>
 
             {/* Desktop Navigation */}
