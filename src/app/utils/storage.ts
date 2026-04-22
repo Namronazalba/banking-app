@@ -149,7 +149,7 @@ export const initializeDemoData = (userId: string): void => {
       accountNumber: generateAccountNumber(),
       accountType: 'checking',
       balance: 5420.50,
-      currency: 'USD',
+      currency: 'PHP',
       createdAt: new Date().toISOString(),
       status: 'active',
     };
@@ -160,7 +160,7 @@ export const initializeDemoData = (userId: string): void => {
       accountNumber: generateAccountNumber(),
       accountType: 'savings',
       balance: 12850.75,
-      currency: 'USD',
+      currency: 'PHP',
       createdAt: new Date().toISOString(),
       status: 'active',
     };

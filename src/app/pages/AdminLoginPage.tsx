@@ -23,7 +23,7 @@ export const AdminLoginPage: React.FC = () => {
     setLoading(true);
 
     // Demo admin credentials
-    if (email === 'admin@securebank.com' && password === 'admin123') {
+    if (email === 'admin@bankwithnorms.com' && password === 'admin123') {
       // For demo, we'll use a special login that sets admin role
       const success = await login(email, password);
       if (success) {
@@ -69,7 +69,7 @@ export const AdminLoginPage: React.FC = () => {
                 <AlertCircle className="h-4 w-4 text-purple-600" />
                 <AlertDescription className="text-purple-800">
                   <strong>Demo Credentials:</strong><br />
-                  Email: admin@securebank.com<br />
+                  Email: admin@bankwithnorms.com<br />
                   Password: admin123
                 </AlertDescription>
               </Alert>

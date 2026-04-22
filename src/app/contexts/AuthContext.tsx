@@ -46,7 +46,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setCurrentUser(adminUser);
       return true;
     }
-    
+    if (email === 'testuser@bankwithnorms.com' && password === '123456') {
+      const normalUser: User = {
+        id: 'user-001',
+        email: 'testuser@bankwithnorms.com',
+        firstName: 'Test',
+        lastName: 'User',
+        phone: '+63 900 000 0000',
+        address: 'Quezon City, Philippines',
+        pin: '1234',
+        role: 'user',
+        createdAt: new Date().toISOString(),
+      };
+
+      setUser(normalUser);
+      setIsAuthenticated(true);
+      setCurrentUser(normalUser);
+
+      return true;
+    }
     const foundUser = findUserByEmail(email);
     
     // For demo purposes, accept any password that's at least 6 characters

@@ -47,7 +47,7 @@ export const DepositPage: React.FC = () => {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'PHP',
     }).format(amount);
   };
 
@@ -78,7 +78,7 @@ export const DepositPage: React.FC = () => {
     }
 
     if (depositAmount > 10000) {
-      setError('Maximum deposit amount is $10,000 per transaction');
+      setError('Maximum deposit amount is ₱10,000 per transaction');
       return;
     }
 
@@ -230,7 +230,7 @@ export const DepositPage: React.FC = () => {
                 <Label htmlFor="amount">Deposit Amount</Label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                    $
+                    ₱
                   </span>
                   <Input
                     id="amount"
@@ -244,7 +244,7 @@ export const DepositPage: React.FC = () => {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Maximum deposit: $10,000 per transaction
+                  Maximum deposit: ₱10,000 per transaction
                 </p>
               </div>
 
@@ -270,7 +270,7 @@ export const DepositPage: React.FC = () => {
                       size="sm"
                       onClick={() => setAmount(quickAmount.toString())}
                     >
-                      ${quickAmount}
+                      ₱{quickAmount}
                     </Button>
                   ))}
                 </div>
