@@ -560,8 +560,9 @@ export const DepositPage: React.FC = () => {
                         {getStatusBadge(deposit.status)}
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        {account?.accountType.charAt(0).toUpperCase() + account?.accountType.slice(1)} Account - 
-                        ****{account?.accountNumber.slice(-4)}
+                        {account
+                          ? `${account.accountType.charAt(0).toUpperCase()}${account.accountType.slice(1)} Account - ****${account.accountNumber.slice(-4)}`
+                          : 'No account selected'}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {formatDate(deposit.createdAt)}
