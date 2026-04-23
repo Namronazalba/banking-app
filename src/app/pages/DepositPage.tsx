@@ -12,7 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Alert, AlertDescription } from '../components/ui/alert';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Badge } from '../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Tabs, TabsContent } from '../components/ui/tabs';
+// import { TabsList, TabsTrigger } from '../components/ui/tabs';
 import { AlertCircle, ArrowDownLeft, QrCode, Clock, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 import QRCodeLib from 'qrcode';
