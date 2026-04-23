@@ -204,7 +204,7 @@ export const LoginPage: React.FC = () => {
                     <Input
                       id="phone"
                       type="tel"
-                      placeholder="+1 (555) 000-0000"
+                      placeholder="+63 900 000 0000"
                       value={signupData.phone}
                       onChange={(e) => setSignupData({ ...signupData, phone: e.target.value })}
                       required

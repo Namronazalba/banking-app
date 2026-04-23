@@ -3,14 +3,6 @@ import { Link, useNavigate, useLocation, Outlet } from 'react-router';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback } from './ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import {
   Landmark,
@@ -60,7 +52,7 @@ export const Layout: React.FC = () => {
             {/* Logo */}
             <Link to="/dashboard" className="flex items-center gap-2">
               <Landmark className="h-8 w-8 text-indigo-600" />
-              <span className="text-xl font-bold text-gray-900">BankWithNorms</span>
+              <span className="text-xl font-bold text-gray-900">SecureBank</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -85,38 +77,31 @@ export const Layout: React.FC = () => {
             </nav>
 
             {/* User Menu */}
-            <div className="flex items-center gap-4">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <Avatar>
-                      <AvatarFallback className="bg-indigo-100 text-indigo-600">
-                        {getInitials()}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium">
-                        {user?.firstName} {user?.lastName}
-                      </p>
-                      <p className="text-xs text-muted-foreground">{user?.email}</p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate('/profile')}>
-                    <User className="mr-2 h-4 w-4" />
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="text-red-600">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <div className="flex items-center gap-3">
+              {/* User Info */}
+              <div className="hidden md:flex items-center gap-3">
+                <Avatar>
+                  <AvatarFallback className="bg-indigo-100 text-indigo-600">
+                    {getInitials()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="hidden lg:block">
+                  <p className="text-sm font-medium">
+                    {user?.firstName} {user?.lastName}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{user?.email}</p>
+                </div>
+              </div>
+
+              {/* Logout Button */}
+              <Button
+                variant="outline"
+                onClick={handleLogout}
+                className="hidden md:inline-flex text-red-600 border-red-200 hover:bg-red-50"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
 
               {/* Mobile Menu */}
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -127,6 +112,21 @@ export const Layout: React.FC = () => {
                 </SheetTrigger>
                 <SheetContent side="right" className="w-64">
                   <div className="flex flex-col gap-4 mt-8">
+                    <div className="px-4 pb-4 border-b">
+                      <div className="flex items-center gap-3 mb-2">
+                        <Avatar>
+                          <AvatarFallback className="bg-indigo-100 text-indigo-600">
+                            {getInitials()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium">
+                            {user?.firstName} {user?.lastName}
+                          </p>
+                          <p className="text-xs text-muted-foreground">{user?.email}</p>
+                        </div>
+                      </div>
+                    </div>
                     {navItems.map((item) => {
                       const Icon = item.icon;
                       return (
@@ -145,6 +145,16 @@ export const Layout: React.FC = () => {
                         </Link>
                       );
                     })}
+                    <div className="mt-4 px-4">
+                      <Button
+                        variant="outline"
+                        className="w-full text-red-600 border-red-200 hover:bg-red-50"
+                        onClick={handleLogout}
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Logout
+                      </Button>
+                    </div>
                   </div>
                 </SheetContent>
               </Sheet>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router';
 import { useAuth } from '../contexts/AuthContext';
-import { getUserAccounts, getAccountById, savePendingDeposit, generateId, getUserPendingDeposits } from '../utils/storage';
-import type { Account, PendingDeposit } from '../types/banking';
+import { getUserAccounts, getAccountById, savePendingDeposit, generateId, getUserPendingDeposits, updateAccount, saveTransaction } from '../utils/storage';
+import type { PendingDeposit, Account } from '../types/banking';
+// import type { Account } from '../types/banking';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -11,7 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Alert, AlertDescription } from '../components/ui/alert';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Badge } from '../components/ui/badge';
-import { AlertCircle, ArrowDownLeft, QrCode, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { AlertCircle, ArrowDownLeft, QrCode, Clock, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 import QRCodeLib from 'qrcode';
 
@@ -24,10 +26,16 @@ export const DepositPage: React.FC = () => {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [pendingDeposits, setPendingDeposits] = useState<PendingDeposit[]>([]);
-  
+
   const [showQRDialog, setShowQRDialog] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [currentDepositId, setCurrentDepositId] = useState('');
+
+  // Quick deposit states
+  const [quickAccountId, setQuickAccountId] = useState('');
+  const [quickAmount, setQuickAmount] = useState('');
+  const [quickDescription, setQuickDescription] = useState('');
+  const [quickError, setQuickError] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -44,10 +52,17 @@ export const DepositPage: React.FC = () => {
     }
   };
 
+  const reloadAccounts = () => {
+    if (user) {
+      const userAccounts = getUserAccounts(user.id);
+      setAccounts(userAccounts);
+    }
+  };
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'PHP',
+      currency: 'USD',
     }).format(amount);
   };
 
@@ -174,14 +189,217 @@ export const DepositPage: React.FC = () => {
     }
   };
 
+  const handleQuickDeposit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setQuickError('');
+
+    const depositAmount = parseFloat(quickAmount);
+    if (isNaN(depositAmount) || depositAmount <= 0) {
+      setQuickError('Please enter a valid amount');
+      return;
+    }
+
+    const account = getAccountById(quickAccountId);
+    if (!account) {
+      setQuickError('Account not found');
+      return;
+    }
+
+    if (depositAmount > 10000) {
+      setQuickError('Maximum deposit amount is ₱10,000 per transaction');
+      return;
+    }
+
+    // Update account balance directly
+    const newBalance = account.balance + depositAmount;
+    updateAccount(quickAccountId, { balance: newBalance });
+
+    // Create transaction record
+    saveTransaction({
+      id: generateId(),
+      accountId: quickAccountId,
+      type: 'deposit',
+      amount: depositAmount,
+      balance: newBalance,
+      description: quickDescription || 'Quick Deposit',
+      status: 'completed',
+      createdAt: new Date().toISOString(),
+    });
+
+    toast.success(`Successfully deposited ${formatCurrency(depositAmount)} to your account!`);
+
+    // Reset form and reload accounts
+    setQuickAmount('');
+    setQuickDescription('');
+    reloadAccounts();
+  };
+
+  const selectedQuickAccount = accounts.find(acc => acc.id === quickAccountId);
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Deposit Money</h1>
-        <p className="text-gray-600 mt-1">Create deposit request for admin approval</p>
+        <p className="text-gray-600 mt-1">Choose your deposit method below</p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <Tabs defaultValue="quick" className="w-full">
+        {/* <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="quick">
+            <Zap className="h-4 w-4 mr-2" />
+            Quick Deposit (Temporary)
+          </TabsTrigger>
+          <TabsTrigger value="qr">
+            <QrCode className="h-4 w-4 mr-2" />
+            QR Deposit (Admin Approval)
+          </TabsTrigger>
+        </TabsList> */}
+
+        {/* Quick Deposit Tab */}
+        <TabsContent value="quick" className="space-y-6">
+          <Alert className="bg-yellow-50 border-yellow-200">
+            <Zap className="h-4 w-4 text-yellow-600" />
+            <AlertDescription className="text-yellow-800">
+              <strong>Temporary Feature:</strong> This quick deposit adds money instantly to your account without admin approval. This is a temporary feature for testing purposes.
+            </AlertDescription>
+          </Alert>
+
+          <div className="grid gap-6 lg:grid-cols-2">
+            {/* Quick Deposit Form */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-yellow-100 rounded-lg">
+                    <Zap className="h-6 w-6 text-yellow-600" />
+                  </div>
+                  <div>
+                    <CardTitle>Instant Deposit</CardTitle>
+                    <CardDescription>Add money instantly without approval</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleQuickDeposit} className="space-y-6">
+                  {quickError && (
+                    <Alert variant="destructive">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{quickError}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  <div className="space-y-2">
+                    <Label htmlFor="quick-account">Deposit To Account</Label>
+                    <Select value={quickAccountId} onValueChange={setQuickAccountId} required>
+                      <SelectTrigger id="quick-account">
+                        <SelectValue placeholder="Select account" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {accounts.map((account) => (
+                          <SelectItem key={account.id} value={account.id}>
+                            {account.accountType.charAt(0).toUpperCase() + account.accountType.slice(1)} -
+                            ****{account.accountNumber.slice(-4)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {selectedQuickAccount && (
+                      <p className="text-sm text-muted-foreground">
+                        Current balance: {formatCurrency(selectedQuickAccount.balance)}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="quick-amount">Deposit Amount</Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        ₱
+                      </span>
+                      <Input
+                        id="quick-amount"
+                        type="number"
+                        step="0.01"
+                        placeholder="0.00"
+                        value={quickAmount}
+                        onChange={(e) => setQuickAmount(e.target.value)}
+                        className="pl-7"
+                        required
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Maximum deposit: ₱10,000 per transaction
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="quick-description">Description (Optional)</Label>
+                    <Input
+                      id="quick-description"
+                      placeholder="e.g., Cash deposit, Salary"
+                      value={quickDescription}
+                      onChange={(e) => setQuickDescription(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Quick amount buttons */}
+                  <div className="space-y-2">
+                    <Label>Quick Amounts</Label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[100, 500, 1000, 5000].map((quickAmountValue) => (
+                        <Button
+                          key={quickAmountValue}
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setQuickAmount(quickAmountValue.toString())}
+                        >
+                          ₱{quickAmountValue}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Button type="submit" className="w-full bg-yellow-600 hover:bg-yellow-700" size="lg">
+                    <Zap className="h-4 w-4 mr-2" />
+                    Deposit Instantly
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+
+            {/* Information Card */}
+            <Card className="bg-yellow-50 border-yellow-200">
+              <CardContent className="pt-6">
+                <h4 className="font-medium mb-3 text-yellow-900 flex items-center gap-2">
+                  <Zap className="h-5 w-5" />
+                  How Quick Deposit Works
+                </h4>
+                <ul className="space-y-3 text-sm text-yellow-800">
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold mt-0.5">1.</span>
+                    <span>Select the account to deposit into</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold mt-0.5">2.</span>
+                    <span>Enter the amount you want to deposit</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold mt-0.5">3.</span>
+                    <span>Click "Deposit Instantly" - money is added immediately</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold mt-0.5">4.</span>
+                    <span><strong>No admin approval required</strong> - for temporary use only</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* QR Deposit Tab */}
+        <TabsContent value="qr" className="space-y-6">
+          <div className="grid gap-6 lg:grid-cols-2">
         {/* New Deposit Form */}
         <Card>
           <CardHeader>
@@ -270,7 +488,7 @@ export const DepositPage: React.FC = () => {
                       size="sm"
                       onClick={() => setAmount(quickAmount.toString())}
                     >
-                      ₱{quickAmount}
+                      ${quickAmount}
                     </Button>
                   ))}
                 </div>
@@ -316,6 +534,8 @@ export const DepositPage: React.FC = () => {
           </CardContent>
         </Card>
       </div>
+        </TabsContent>
+      </Tabs>
 
       {/* Pending Deposits */}
       {pendingDeposits.length > 0 && (
@@ -339,9 +559,8 @@ export const DepositPage: React.FC = () => {
                         {getStatusBadge(deposit.status)}
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        {account
-                          ? `${account.accountType.charAt(0).toUpperCase()}${account.accountType.slice(1)} Account - ****${account.accountNumber.slice(-4)}`
-                          : ""}
+                        {account?.accountType.charAt(0).toUpperCase() + account?.accountType.slice(1)} Account - 
+                        ****{account?.accountNumber.slice(-4)}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {formatDate(deposit.createdAt)}
