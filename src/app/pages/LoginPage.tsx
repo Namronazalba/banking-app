@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Landmark, AlertCircle, ShieldCheck } from 'lucide-react';
+import { Landmark, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '../components/ui/alert';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login, signup } = useAuth();
   
-  const [loginEmail, setLoginEmail] = useState('');
+  const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
   
   const [signupData, setSignupData] = useState({
+    username: '',
     email: '',
     password: '',
     firstName: '',
@@ -36,11 +37,11 @@ export const LoginPage: React.FC = () => {
     setLoginLoading(true);
 
     try {
-      const success = await login(loginEmail, loginPassword);
+      const success = await login(loginUsername, loginPassword);
       if (success) {
         navigate('/dashboard');
       } else {
-        setLoginError('Invalid email or password');
+        setLoginError('Invalid username or password');
       }
     } catch (error) {
       setLoginError('An error occurred during login');
@@ -68,7 +69,9 @@ export const LoginPage: React.FC = () => {
 
     try {
       const success = await signup({
-        email: signupData.email,
+        username: signupData.username,
+        email:signupData.email,
+        password: signupData.password, 
         firstName: signupData.firstName,
         lastName: signupData.lastName,
         phone: signupData.phone,
@@ -79,7 +82,7 @@ export const LoginPage: React.FC = () => {
       if (success) {
         navigate('/dashboard');
       } else {
-        setSignupError('Email already exists');
+        setSignupError('username already exists');
       }
     } catch (error) {
       setSignupError('An error occurred during signup');
@@ -119,13 +122,13 @@ export const LoginPage: React.FC = () => {
                     </Alert>
                   )}
                   <div className="space-y-2">
-                    <Label htmlFor="login-email">Email</Label>
+                    <Label htmlFor="login-username">Username</Label>
                     <Input
-                      id="login-email"
-                      type="email"
-                      placeholder="john@example.com"
-                      value={loginEmail}
-                      onChange={(e) => setLoginEmail(e.target.value)}
+                      id="login-username"
+                      type="username"
+                      placeholder="user"
+                      value={loginUsername}
+                      onChange={(e) => setLoginUsername(e.target.value)}
                       required
                     />
                   </div>
@@ -134,7 +137,7 @@ export const LoginPage: React.FC = () => {
                     <Input
                       id="login-password"
                       type="password"
-                      placeholder="••••••••"
+                      placeholder="Min. 6 characters"
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
                       required
@@ -193,9 +196,20 @@ export const LoginPage: React.FC = () => {
                     <Input
                       id="signup-email"
                       type="email"
-                      placeholder="john@example.com"
+                      placeholder="user@example.com"
                       value={signupData.email}
                       onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-username">username</Label>
+                    <Input
+                      id="signup-username"
+                      type="text"
+                      placeholder="user"
+                      value={signupData.username}
+                      onChange={(e) => setSignupData({ ...signupData, username: e.target.value })}
                       required
                     />
                   </div>
@@ -254,12 +268,12 @@ export const LoginPage: React.FC = () => {
           </TabsContent>
         </Tabs>
 
-        <div className="mt-4 text-center">
+        {/* <div className="mt-4 text-center">
           <Link to="/admin" className="text-sm text-gray-600 hover:text-indigo-600 flex items-center justify-center gap-2">
             <ShieldCheck className="h-4 w-4" />
             Admin Portal
           </Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );

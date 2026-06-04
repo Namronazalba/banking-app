@@ -1,15 +1,25 @@
 export interface User {
   id: string;
   email: string;
+  username: string;
   firstName: string;
   lastName: string;
   phone: string;
   address: string;
   createdAt: string;
-  pin: string; // In real app, this would be hashed
+  pin: string; 
   role?: 'user' | 'admin';
 }
-
+export interface SignupRequest {
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  address: string;
+  password: string;
+  pin: string;
+}
 export interface Account {
   id: string;
   userId: string;
@@ -53,7 +63,8 @@ export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  signup: (userData: Omit<User, 'id' | 'createdAt'>) => Promise<boolean>;
+  signup: (userData: SignupRequest) => Promise<boolean>;
   logout: () => void;
-  verifyPin: (pin: string) => boolean;
+  verifyPin: (pin: string) => Promise<boolean>;
+  loading: boolean;
 }
