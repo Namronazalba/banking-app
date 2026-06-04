@@ -47,8 +47,8 @@ export const ProfilePage: React.FC = () => {
   };
 
   const getInitials = () => {
-    if (!user) return 'U';
-    return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
+    if (!user?.firstName || !user?.lastName) return "U";
+    return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
   };
 
   const formatDate = (dateString: string) => {
@@ -59,7 +59,13 @@ export const ProfilePage: React.FC = () => {
     });
   };
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <div className="p-4 text-center text-gray-500">
+        Loading profile...
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -142,7 +148,19 @@ export const ProfilePage: React.FC = () => {
               />
             </div>
           </div>
-
+          <div className="space-y-2">
+            <Label htmlFor="email">Username</Label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                id="username"
+                type="username"
+                value={user.username}
+                disabled={!isEditing}
+                className="pl-10"
+              />
+            </div>
+          </div>
           <div className="space-y-2">
             <Label htmlFor="phone">Phone Number</Label>
             <div className="relative">
